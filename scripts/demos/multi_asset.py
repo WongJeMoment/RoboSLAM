@@ -179,40 +179,40 @@ class MultiObjectSceneCfg(InteractiveSceneCfg):
     )
 
     # articulation
-    robot: ArticulationCfg = ArticulationCfg(
-        prim_path="/World/envs/env_.*/Robot",
-        spawn=sim_utils.MultiUsdFileCfg(
-            usd_path=[
-                f"{ISAACLAB_NUCLEUS_DIR}/Robots/ANYbotics/ANYmal-C/anymal_c.usd",
-                f"{ISAACLAB_NUCLEUS_DIR}/Robots/ANYbotics/ANYmal-D/anymal_d.usd",
-            ],
-            random_choice=True,
-            rigid_props=sim_utils.RigidBodyPropertiesCfg(
-                disable_gravity=False,
-                retain_accelerations=False,
-                linear_damping=0.0,
-                angular_damping=0.0,
-                max_linear_velocity=1000.0,
-                max_angular_velocity=1000.0,
-                max_depenetration_velocity=1.0,
-            ),
-            articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-                enabled_self_collisions=True, solver_position_iteration_count=4, solver_velocity_iteration_count=0
-            ),
-            activate_contact_sensors=True,
-        ),
-        init_state=ArticulationCfg.InitialStateCfg(
-            pos=(0.0, 0.0, 0.6),
-            joint_pos={
-                ".*HAA": 0.0,  # all HAA
-                ".*F_HFE": 0.4,  # both front HFE
-                ".*H_HFE": -0.4,  # both hind HFE
-                ".*F_KFE": -0.8,  # both front KFE
-                ".*H_KFE": 0.8,  # both hind KFE
-            },
-        ),
-        actuators={"legs": ANYDRIVE_3_LSTM_ACTUATOR_CFG},
-    )
+    # robot: ArticulationCfg = ArticulationCfg(
+    #     prim_path="/World/envs/env_.*/Robot",
+    #     spawn=sim_utils.MultiUsdFileCfg(
+    #         usd_path=[
+    #             f"{ISAACLAB_NUCLEUS_DIR}/Robots/ANYbotics/ANYmal-C/anymal_c.usd",
+    #             f"{ISAACLAB_NUCLEUS_DIR}/Robots/ANYbotics/ANYmal-D/anymal_d.usd",
+    #         ],
+    #         random_choice=True,
+    #         rigid_props=sim_utils.RigidBodyPropertiesCfg(
+    #             disable_gravity=False,
+    #             retain_accelerations=False,
+    #             linear_damping=0.0,
+    #             angular_damping=0.0,
+    #             max_linear_velocity=1000.0,
+    #             max_angular_velocity=1000.0,
+    #             max_depenetration_velocity=1.0,
+    #         ),
+    #         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+    #             enabled_self_collisions=True, solver_position_iteration_count=4, solver_velocity_iteration_count=0
+    #         ),
+    #         activate_contact_sensors=True,
+    #     ),
+    #     init_state=ArticulationCfg.InitialStateCfg(
+    #         pos=(0.0, 0.0, 0.6),
+    #         joint_pos={
+    #             ".*HAA": 0.0,  # all HAA
+    #             ".*F_HFE": 0.4,  # both front HFE
+    #             ".*H_HFE": -0.4,  # both hind HFE
+    #             ".*F_KFE": -0.8,  # both front KFE
+    #             ".*H_KFE": 0.8,  # both hind KFE
+    #         },
+    #     ),
+    #     actuators={"legs": ANYDRIVE_3_LSTM_ACTUATOR_CFG},
+    # )
 
 
 ##
@@ -226,7 +226,7 @@ def run_simulator(sim: SimulationContext, scene: InteractiveScene):
     # note: we only do this here for readability.
     rigid_object: RigidObject = scene["object"]
     rigid_object_collection: RigidObjectCollection = scene["object_collection"]
-    robot: Articulation = scene["robot"]
+    #robot: Articulation = scene["robot"]
     # Define simulation stepping
     sim_dt = sim.get_physics_dt()
     count = 0
@@ -249,19 +249,19 @@ def run_simulator(sim: SimulationContext, scene: InteractiveScene):
             rigid_object_collection.write_object_com_velocity_to_sim(object_state[..., 7:])
             # robot
             # -- root state
-            root_state = robot.data.default_root_state.clone()
-            root_state[:, :3] += scene.env_origins
-            robot.write_root_pose_to_sim(root_state[:, :7])
-            robot.write_root_velocity_to_sim(root_state[:, 7:])
-            # -- joint state
-            joint_pos, joint_vel = robot.data.default_joint_pos.clone(), robot.data.default_joint_vel.clone()
-            robot.write_joint_state_to_sim(joint_pos, joint_vel)
+            # root_state = robot.data.default_root_state.clone()
+            # root_state[:, :3] += scene.env_origins
+            # robot.write_root_pose_to_sim(root_state[:, :7])
+            # robot.write_root_velocity_to_sim(root_state[:, 7:])
+            # # -- joint state
+            # joint_pos, joint_vel = robot.data.default_joint_pos.clone(), robot.data.default_joint_vel.clone()
+            # robot.write_joint_state_to_sim(joint_pos, joint_vel)
             # clear internal buffers
             scene.reset()
             print("[INFO]: Resetting scene state...")
 
         # Apply action to robot
-        robot.set_joint_position_target(robot.data.default_joint_pos)
+        # robot.set_joint_position_target(robot.data.default_joint_pos)
         # Write data to sim
         scene.write_data_to_sim()
         # Perform step
@@ -289,7 +289,8 @@ def main():
         # DO YOUR OWN OTHER KIND OF RANDOMIZATION HERE!
         # Note: Just need to acquire the right attribute about the property you want to set
         # Here is an example on setting color randomly
-        randomize_shape_color(scene_cfg.object.prim_path)
+        #randomize_shape_color(scene_cfg.object.prim_path)
+        pass
 
     # Play the simulator
     sim.reset()

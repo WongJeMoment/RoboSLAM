@@ -52,7 +52,18 @@ def define_sensor() -> RayCaster:
         attach_yaw_only=True,
         debug_vis=not args_cli.headless,
     )
-    ray_caster = RayCaster(cfg=ray_caster_cfg)
+
+    height_scanner = RayCasterCfg(
+        prim_path="/World/Origin.*/ball",
+        update_period=0.02,
+        offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, 20.0)),
+        attach_yaw_only=True,
+        pattern_cfg=patterns.GridPatternCfg(resolution=0.1, size=[1.6, 1.0]),
+        debug_vis=True,
+        mesh_prim_paths=["/World/ground"],
+    )
+
+    ray_caster = RayCaster(cfg=height_scanner)
 
     return ray_caster
 

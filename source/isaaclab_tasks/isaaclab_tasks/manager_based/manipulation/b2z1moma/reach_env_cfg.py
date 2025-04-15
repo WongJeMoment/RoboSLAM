@@ -33,7 +33,6 @@ import random
 # Scene definition
 ##
 
-
 @configclass
 class ReachSceneCfg(InteractiveSceneCfg):
     """Configuration for the scene with a robotic arm."""

@@ -42,7 +42,6 @@ class ReachSceneCfg(InteractiveSceneCfg):
         init_state=AssetBaseCfg.InitialStateCfg(pos=(0, 0, -0.6)),
         spawn=GroundPlaneCfg(),
     )
-
     terrain_cfg = TerrainImporterCfg(
         num_envs=2,
         env_spacing=10,
